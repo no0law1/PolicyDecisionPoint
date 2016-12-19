@@ -71,5 +71,15 @@ describe('Policy Decision Point', function() {
                 done()
             })
         })
+
+        it('should check roles permission', function (done) {
+            pdp('./test/model.json', (err, pdp) => {
+                if(err){
+                    done(err)
+                }
+                assert.equal(true, pdp.isPermitted('andre', 'chat'))
+                done()
+            })
+        })
     })
 })

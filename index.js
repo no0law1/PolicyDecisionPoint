@@ -2,11 +2,6 @@
 
 const fs = require('fs')
 
-// const User = require('./model/User')
-// const Role = require('./model/Role')
-// const Permission = require('./model/Permission')
-// const Session = require('./model/Session')
-
 /**
  * UA - User Assigned
  * PA - Permission Assigned
@@ -33,12 +28,17 @@ function isPermittedAux(role, permission) {
 const pdp = {
 
     isPermitted: function (user, permission) {
-        const role = memoryDB.UA[user]
-        if(!role){
+        const roles = memoryDB.UA[user]
+        if(!roles){
             throw new Error('user does not exist')
         }
 
-        return isPermittedAux(role, permission)
+        for(let i = 0; i<roles.length; i++){
+            if(isPermittedAux(roles[i], permission)){
+                return true
+            }
+        }
+        return false
     }
 }
 

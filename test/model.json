@@ -1,13 +1,14 @@
 {
   "UA": {
-    "nuno": "admin",
-    "carlos": "designer",
-    "joao": "user"
+    "nuno": ["admin"],
+    "carlos": ["designer"],
+    "andre": ["designer", "social"],
+    "joao": ["user"]
   },
   "PA": {
     "admin": ["kick"],
     "designer": ["write"],
-    "social": ["write"],
+    "social": ["chat"],
     "user": ["read"]
   },
   "RH": {
