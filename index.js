@@ -12,7 +12,7 @@ const fs = require('fs')
  * PA - Permission Assigned
  * RH - Role Hierarchy
  */
-var memoryDB = {}
+let memoryDB = {}
 
 function isPermittedAux(role, permission) {
     const permissions = memoryDB.PA[role]
@@ -24,9 +24,9 @@ function isPermittedAux(role, permission) {
     const hierarchy = memoryDB.RH[role]
     for(let i = 0; i<hierarchy.length; i++){
         if(isPermittedAux(hierarchy[i], permission))
-            return true;
+            return true
     }
-    return false;
+    return false
 }
 
 
