@@ -1,0 +1,19 @@
+{
+  "UA": {
+    "nuno": "admin",
+    "carlos": "designer",
+    "joao": "user"
+  },
+  "PA": {
+    "admin": ["kick"],
+    "designer": ["write"],
+    "social": ["write"],
+    "user": ["read"]
+  },
+  "RH": {
+    "admin": ["designer", "social"],
+    "designer": ["user"],
+    "social": ["user"],
+    "user": []
+  }
+}

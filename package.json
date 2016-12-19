@@ -1,0 +1,19 @@
+{
+  "name": "policy-decision-point",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "contributors": [
+    "Nuno Reis <nuno.m.reis@netcabo.pt>",
+    "Carlos Florêncio <>",
+    "Carlos Pereira <>"
+  ],
+  "scripts": {
+    "test": "mocha -d"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mocha": "^3.2.0"
+  }
+}
