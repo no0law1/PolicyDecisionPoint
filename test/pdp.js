@@ -145,19 +145,34 @@ describe('Policy Decision Point', function() {
             })
         })
 
-        it('should throw error already in session', function (done) {
+        it('should return true already in session', function (done) {
             pdp('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
                 pdp.resetSession()
                 assert(pdp.login('nuno', ["admin"]))
+                assert(pdp.login('nuno', ["admin"]))
+                done()
+            })
+        })
+    })
+
+    describe('#logout()', function () {
+        it('should logout user', function (done) {
+            pdp('./test/model.json', (err, pdp) => {
+                if(err){
+                    done(err)
+                }
+                pdp.resetSession()
+                assert(pdp.login('nuno', ['admin']))
+                pdp.logout('nuno')
                 assert.throws(
                     () => {
-                        pdp.login('nuno', ["admin"])
+                        pdp.isPermitted('nuno', 'write')
                     },
                     Error,
-                    'user already logged in'
+                    'user is not in session'
                 )
                 done()
             })
