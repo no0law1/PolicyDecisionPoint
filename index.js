@@ -57,7 +57,7 @@ function checkRole(roleToCheck, roles) {
 }
 
 /**
- * Checks of user is logged
+ * Checks if user is logged
  *
  * @param user string username
  * @return {*}
