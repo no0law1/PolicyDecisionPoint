@@ -17,9 +17,9 @@ Requires a config file which has to be json.
 **Ex:**
 ```json
 {
-    "UA": {...},
-    "PA": {...},
-    "RH": {...}
+    "UA": {},
+    "PA": {},
+    "RH": {}
 }
 ```
 
