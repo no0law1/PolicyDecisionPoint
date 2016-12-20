@@ -1,7 +1,7 @@
 {
   "name": "policy-decision-point",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.2",
+  "description": "Policy Decision Point for access control authentication based on roles and hierarchies",
   "main": "index.js",
   "contributors": [
     "Nuno Reis <nuno.m.reis@netcabo.pt>",
@@ -13,7 +13,11 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "mocha": "^3.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/no0law1/PolicyDecisionPoint.git"
   }
 }
