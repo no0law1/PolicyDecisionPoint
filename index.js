@@ -75,6 +75,17 @@ const pdp = {
         sessions = {}
     },
 
+
+    /**
+     * Removes the user of the session
+     * @param user user to delete
+     */
+    logout: function (user) {
+        if(sessions[user]){
+            delete sessions[user]
+        }
+    },
+
     /**
      * Logs a user
      *
@@ -84,7 +95,7 @@ const pdp = {
      */
     login: function (user, roles) {
         if(isLogged(user)){
-            throw new Error('user already logged in') //todo: return true or leave error?
+            return true
         }
         const userRoles = memoryDB.UA[user]
         if(!roles){
