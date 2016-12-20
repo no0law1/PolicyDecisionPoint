@@ -3,6 +3,8 @@
 const fs = require('fs')
 
 /**
+ * Memory of the pdp
+ *
  * UA - User Assigned
  * PA - Permission Assigned
  * RH - Role Hierarchy
@@ -55,7 +57,7 @@ function checkRole(roleToCheck, roles) {
 }
 
 /**
- * checks of user is logged
+ * Checks of user is logged
  *
  * @param user string username
  * @return {*}
@@ -66,7 +68,6 @@ function isLogged(user){
 
 
 const pdp = {
-
     /**
      * Resets all sessions
      */
@@ -75,15 +76,15 @@ const pdp = {
     },
 
     /**
-     * logs a user
+     * Logs a user
      *
      * @param user string username
      * @param roles array of strings
      * @return {boolean} login successful
      */
     login: function (user, roles) {
-        if(sessions[user]){
-            throw new Error('user already logged in')
+        if(isLogged(user)){
+            throw new Error('user already logged in') //todo: return true or leave error?
         }
         const userRoles = memoryDB.UA[user]
         if(!roles){
