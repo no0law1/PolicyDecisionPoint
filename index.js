@@ -9,6 +9,20 @@ const fs = require('fs')
  */
 let memoryDB = {}
 
+/**
+ * Used to store user sessions
+ *
+ * @type {{}} sessions.user.role
+ */
+let sessions = {}
+
+/**
+ * Auxiliary method to isPermitted()
+ *
+ * @param role role to check permission
+ * @param permission permission to check
+ * @return {boolean} true if role permits permission
+ */
 function isPermittedAux(role, permission) {
     const permissions = memoryDB.PA[role]
     for(let i = 0; i<permissions.length; i++){
@@ -24,14 +38,79 @@ function isPermittedAux(role, permission) {
     return false
 }
 
+/**
+ * Checks if roleToCheck exists in the collection roles passed
+ *
+ * @param roleToCheck string role
+ * @param roles array of strings role
+ * @return {boolean}
+ */
+function checkRole(roleToCheck, roles) {
+    for(let i = 0; i<roles.length; i++){
+        if(roles[i] == roleToCheck || checkRole(roleToCheck, memoryDB.RH[roles[i]])){
+            return true
+        }
+    }
+    return false
+}
+
+/**
+ * checks of user is logged
+ *
+ * @param user string username
+ * @return {*}
+ */
+function isLogged(user){
+    return sessions[user]
+}
+
 
 const pdp = {
 
-    isPermitted: function (user, permission) {
-        const roles = memoryDB.UA[user]
+    /**
+     * Resets all sessions
+     */
+    resetSession: function () {
+        sessions = {}
+    },
+
+    /**
+     * logs a user
+     *
+     * @param user string username
+     * @param roles array of strings
+     * @return {boolean} login successful
+     */
+    login: function (user, roles) {
+        if(sessions[user]){
+            throw new Error('user already logged in')
+        }
+        const userRoles = memoryDB.UA[user]
         if(!roles){
             throw new Error('user does not exist')
         }
+
+        for (let i = 0; i < roles.length; i++) {
+            if(!checkRole(roles[i], userRoles)){
+                throw new Error('no such role: '+ roles[i])
+            }
+        }
+        sessions[user] = roles
+        return true
+    },
+
+    /**
+     * Checks if a determined user has a certain permission
+     *
+     * @param user string username
+     * @param permission permission to check
+     * @return {boolean} true if permission is allowed to user
+     */
+    isPermitted: function (user, permission) {
+        if(!isLogged(user)){
+            throw new Error('user is not in session')
+        }
+        const roles = sessions[user]
 
         for(let i = 0; i<roles.length; i++){
             if(isPermittedAux(roles[i], permission)){
