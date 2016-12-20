@@ -15,7 +15,7 @@ $ npm install --save policy-decision-point
 Requires a config file which has to be json.
 
 **Ex:**
-```
+```json
 {
     "UA": {...},
     "PA": {...},
