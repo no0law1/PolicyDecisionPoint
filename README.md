@@ -26,18 +26,26 @@ Requires a config file which has to be json.
 For more specific example, see test/model.json
 
 ```js
-    const pdpInit = require('policy-decision-point')
+    const pdpFactory = require('policy-decision-point')
     
-    pdpInit.configure('pathOfFile', (err, pdp) => {
-                
-        // Login your user if exists in file
-        pdp.login(user)
-        
-        // Checks if user has such permission
-        pdp.isPermitted(user, permission)
-        
-        // Logs the user out
-        pdp.logout(user)
+    pdpFactory.init('pathOfFile', (err, pdp) => {
+                                           
+       // Login your user if exists in file
+       pdp.login(user)
+       
+       // Checks if user has such permission
+       pdp.isPermitted(user, permission)
+       
+       // Logs the user out
+       pdp.logout(user)
+    })
+    
+    const pdp = pdpFactory.initSync('pathOfFile')
+     
+    const pdp = pdpFactory.initWithJson({
+         "UA": {},
+         "PA": {},
+         "RH": {}
     })
 ```
 
