@@ -133,18 +133,41 @@ const pdp = {
     }
 }
 
+module.exports = {
 
-/**
- *
- * @param path  path of configuration file (json)
- * @param cb    (err, pdp)
- */
-module.exports = function(path, cb){
-    fs.readFile(path, 'utf-8', (err, data) => {
-        if (err) {
-            return cb(err)
-        }
-        memoryDB = JSON.parse(data)
-        return cb(null, pdp)
-    })
+    /**
+     *
+     * @param path  path of configuration file (json)
+     * @param cb    (err, pdp)
+     */
+    init: function (path, cb) {
+        fs.readFile(path, 'utf-8', (err, data) => {
+            if (err) {
+                return cb(err)
+            }
+            memoryDB = JSON.parse(data)
+            return cb(null, pdp)
+        })
+    },
+
+    /**
+     *
+     * @param path configuration file
+     * @return {{resetSession: pdp.resetSession, logout: pdp.logout, login: pdp.login, isPermitted: pdp.isPermitted}}
+     */
+    initSync: function (path) {
+        memoryDB = JSON.parse(fs.readFileSync(path, 'utf-8'))
+        return pdp
+    },
+
+    /**
+     * Takes a json made database and makes it his own
+     *
+     * @param json already made json database
+     * @return {{resetSession: pdp.resetSession, logout: pdp.logout, login: pdp.login, isPermitted: pdp.isPermitted}}
+     */
+    initWithJson: function (json) {
+        memoryDB = json
+        return pdp
+    }
 }

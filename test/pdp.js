@@ -2,23 +2,54 @@
 
 const assert = require('assert')
 const pdp = require('../index')
+const fs = require('fs')
 
 describe('Policy Decision Point', function() {
 
     describe('#configure()', function() {
-        it('should configure correctly', function(done) {
-            pdp('./test/model.json', (err, pdp) => {
+        it('should configure correctly async', function(done) {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
                 done()
             })
         })
+
+        it('should configure correctly sync', function(done) {
+            pdp.initSync('./test/model.json')
+            done()
+        })
+
+        it('should be permitted simple sync', function (done) {
+            const pdpObj = pdp.initSync('./test/model.json')
+
+            console.log(pdpObj)
+            pdpObj.resetSession()
+            assert(pdpObj.login('nuno', ['admin']))
+            assert.equal(true, pdpObj.isPermitted('nuno', 'kick'))
+            done()
+        })
+
+        it('should configure correctly with json', function(done) {
+            pdp.initWithJson('./test/model.json')
+            done()
+        })
+
+        it('should be permitted simple with json', function (done) {
+            const pdpObj = pdp.initWithJson(JSON.parse(fs.readFileSync('./test/model.json')))
+
+            console.log(pdpObj)
+            pdpObj.resetSession()
+            assert(pdpObj.login('nuno', ['admin']))
+            assert.equal(true, pdpObj.isPermitted('nuno', 'kick'))
+            done()
+        })
     })
 
     describe('#isPermitted()', function () {
         it('no user', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -34,7 +65,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should be permitted simple', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -46,7 +77,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should not be permitted simple', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -58,7 +89,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should be permitted child permission', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -70,7 +101,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should be permitted child away permission', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -82,7 +113,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should check roles permission', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -96,7 +127,7 @@ describe('Policy Decision Point', function() {
 
     describe('#login()', function () {
         it('should login simple', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -107,7 +138,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should login with two roles', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -118,7 +149,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should login with role of hierarchy', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -129,7 +160,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should throw error user does not exist', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -146,7 +177,7 @@ describe('Policy Decision Point', function() {
         })
 
         it('should return true already in session', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
@@ -160,7 +191,7 @@ describe('Policy Decision Point', function() {
 
     describe('#logout()', function () {
         it('should logout user', function (done) {
-            pdp('./test/model.json', (err, pdp) => {
+            pdp.init('./test/model.json', (err, pdp) => {
                 if(err){
                     done(err)
                 }
