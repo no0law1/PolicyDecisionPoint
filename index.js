@@ -68,22 +68,12 @@ function isLogged(user){
 
 
 const pdp = {
+
     /**
      * Resets all sessions
      */
     resetSession: function () {
         sessions = {}
-    },
-
-
-    /**
-     * Removes the user of the session
-     * @param user user to delete
-     */
-    logout: function (user) {
-        if(sessions[user]){
-            delete sessions[user]
-        }
     },
 
     /**
@@ -112,6 +102,26 @@ const pdp = {
     },
 
     /**
+     * Retrieves a user role
+     *
+     * @param user  user logged or not logged
+     * @return user roles
+     */
+    userRoles: function (user) {
+        return memoryDB.UA[user]
+    },
+
+    /**
+     * Removes the user of the session
+     * @param user user to delete
+     */
+    logout: function (user) {
+        if(sessions[user]){
+            delete sessions[user]
+        }
+    },
+
+    /**
      * Checks if a determined user has a certain permission
      *
      * @param user string username
@@ -120,7 +130,7 @@ const pdp = {
      */
     isPermitted: function (user, permission) {
         if(!isLogged(user)){
-            throw new Error('user is not in session')
+            return false
         }
         const roles = sessions[user]
 
@@ -133,9 +143,13 @@ const pdp = {
     }
 }
 
+/**
+ * Factories
+ */
 module.exports = {
 
     /**
+     * Initial configuration through a file path, asynchronous
      *
      * @param path  path of configuration file (json)
      * @param cb    (err, pdp)
@@ -151,6 +165,7 @@ module.exports = {
     },
 
     /**
+     * Initial configuration through a file path, synchronous
      *
      * @param path configuration file
      * @return {{resetSession: pdp.resetSession, logout: pdp.logout, login: pdp.login, isPermitted: pdp.isPermitted}}
