@@ -29,15 +29,27 @@ For more specific example, see test/model.json
     const pdpFactory = require('policy-decision-point')
     
     pdpFactory.init('pathOfFile', (err, pdp) => {
-                                           
-       // Login your user if exists in file
-       pdp.login(user)
+       
+       //
+       pdp.resetSession()
+       
+       // Login your user if exists in file/json and grants access to roles
+       pdp.login(user, roles)
+       
+       // Returns all roles that a user can access 
+       pdp.userRoles(user)
+       
+       // Grants a set of roles if user is logged and are represented in file/json
+       pdp.grantRoles(user, roles)
+       
+       // Revokes a set of roles if user is logged and are represented in file/json
+       pdp.revokeRoles(user, roles)
+       
+       // Logs out the user
+       pdp.logout(user)
        
        // Checks if user has such permission
        pdp.isPermitted(user, permission)
-       
-       // Logs the user out
-       pdp.logout(user)
     })
     
     const pdp = pdpFactory.initSync('pathOfFile')

@@ -66,12 +66,23 @@ function isLogged(user){
     return sessions[user]
 }
 
+/**
+ * gets an array containing all roles of a hierarchy of roles
+ *
+ * @param roles father roles to begin the hierarchy
+ * @return {Array.<*>} all roles in the hierarchy (does not contain duplicates)
+ */
 function hierarchyRoles(roles){
     let hierarchy = []
     for(let i = 0; i<roles.length; i++){
-        hierarchy = memoryDB.RH[roles[i]]
+        const subRoles = hierarchyRoles(memoryDB.RH[roles[i]])
+        for(let j = 0; j < subRoles.length; j++){
+            if(!hierarchy.includes(subRoles[j])){
+                hierarchy.push(subRoles[j])
+            }
+        }
     }
-    return roles
+    return hierarchy.concat(roles)
 }
 
 
@@ -110,10 +121,10 @@ const pdp = {
     },
 
     /**
-     * Retrieves a user role
+     * Retrieves all user roles
      *
      * @param user  user logged or not logged
-     * @return user roles
+     * @return Array roles
      */
     userRoles: function (user) {
         return hierarchyRoles(memoryDB.UA[user])

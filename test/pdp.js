@@ -205,13 +205,13 @@ describe('Policy Decision Point', function() {
 
         it('should get designer social and user', function (done) {
             const pdp = pdpFactory.initSync('./test/model.json')
-            assert.equal(["designer", "social", "user"], pdp.userRoles('andre'))
+            assert.deepEqual(["user", "designer", "social"], pdp.userRoles('andre'))
             done()
         })
 
         it('should give all roles', function (done) {
             const pdp = pdpFactory.initSync('./test/model.json')
-            assert.equal(["admin", "designer", "social", "user"], pdp.userRoles('nuno'))
+            assert.deepEqual(["user", "designer", "social", "admin"], pdp.userRoles('nuno'))
             done()
         })
     })
