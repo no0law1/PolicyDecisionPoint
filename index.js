@@ -3,7 +3,7 @@
 const fs = require('fs')
 
 /**
- * Memory of the pdp
+ * Memory of the pdpFactory
  *
  * UA - User Assigned
  * PA - Permission Assigned
@@ -66,6 +66,14 @@ function isLogged(user){
     return sessions[user]
 }
 
+function hierarchyRoles(roles){
+    let hierarchy = []
+    for(let i = 0; i<roles.length; i++){
+        hierarchy = memoryDB.RH[roles[i]]
+    }
+    return roles
+}
+
 
 const pdp = {
 
@@ -108,7 +116,43 @@ const pdp = {
      * @return user roles
      */
     userRoles: function (user) {
-        return memoryDB.UA[user]
+        return hierarchyRoles(memoryDB.UA[user])
+    },
+
+    /**
+     * grant a set of roles to a specific user
+     *
+     * @param user user to grant roles
+     * @param roles roles to be granted on a user
+     */
+    grantRoles: function (user, roles) {
+        if(!isLogged(user)) {
+            throw new Error('user not logged')
+        }
+
+        for(let i = 0; i<roles.length; i++){
+            if(!sessions[user].includes(roles[i]) && checkRole(roles[i], memoryDB.UA[user])){
+                sessions[user].push(roles[i])
+            }
+        }
+    },
+
+    /**
+     * removes the roles passed in the arguments to a specific user
+     *
+     * @param user user to revoke the roles
+     * @param roles roles to revoke the user
+     */
+    revokeRoles: function (user, roles) {
+        if(!isLogged(user)){
+            throw new Error('user not logged')
+        }
+
+        for(let i = 0; i<roles.length; i++){
+            if(sessions[user].includes(roles[i])){
+                sessions[user].splice(sessions[user].indexOf(roles[i]), 1)
+            }
+        }
     },
 
     /**
@@ -152,7 +196,7 @@ module.exports = {
      * Initial configuration through a file path, asynchronous
      *
      * @param path  path of configuration file (json)
-     * @param cb    (err, pdp)
+     * @param cb    (err, pdpFactory)
      */
     init: function (path, cb) {
         fs.readFile(path, 'utf-8', (err, data) => {
@@ -168,7 +212,7 @@ module.exports = {
      * Initial configuration through a file path, synchronous
      *
      * @param path configuration file
-     * @return {{resetSession: pdp.resetSession, logout: pdp.logout, login: pdp.login, isPermitted: pdp.isPermitted}}
+     * @return {{resetSession: pdpFactory.resetSession, logout: pdpFactory.logout, login: pdpFactory.login, isPermitted: pdpFactory.isPermitted}}
      */
     initSync: function (path) {
         memoryDB = JSON.parse(fs.readFileSync(path, 'utf-8'))
@@ -179,7 +223,7 @@ module.exports = {
      * Takes a json made database and makes it his own
      *
      * @param json already made json database
-     * @return {{resetSession: pdp.resetSession, logout: pdp.logout, login: pdp.login, isPermitted: pdp.isPermitted}}
+     * @return {{resetSession: pdpFactory.resetSession, logout: pdpFactory.logout, login: pdpFactory.login, isPermitted: pdpFactory.isPermitted}}
      */
     initWithJson: function (json) {
         memoryDB = json
