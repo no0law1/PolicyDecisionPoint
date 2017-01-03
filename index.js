@@ -28,7 +28,7 @@ let sessions = {}
 function isPermittedAux(role, permission) {
     const permissions = memoryDB.PA[role]
     for(let i = 0; i<permissions.length; i++){
-        if(permission == permissions[i])
+        if(JSON.stringify(permission).match(JSON.stringify(permissions[i])))
             return true
     }
 
