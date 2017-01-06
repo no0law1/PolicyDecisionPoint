@@ -1,6 +1,6 @@
 {
   "name": "policy-decision-point",
-  "version": "2.1.3",
+  "version": "2.2.3",
   "description": "Policy Decision Point for access control authentication based on roles and hierarchies",
   "main": "index.js",
   "contributors": [

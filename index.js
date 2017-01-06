@@ -131,6 +131,27 @@ const pdp = {
     },
 
     /**
+     * Sets the roles to a specific user
+     * Roles not ranged by the user are ignored
+     *
+     * @param user user to set roles
+     * @param roles roles to grant to the user
+     */
+    setRoles: function (user, roles){
+        if(!isLogged(user)) {
+            throw new Error('user not logged')
+        }
+
+        sessions[user] = []
+        for(let i = 0; i<roles.length; i++){
+            if(!sessions[user].includes(roles[i]) && checkRole(roles[i], memoryDB.UA[user])){
+                sessions[user].push(roles[i])
+            }
+        }
+        return sessions[user]
+    },
+
+    /**
      * grant a set of roles to a specific user
      *
      * @param user user to grant roles

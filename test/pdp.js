@@ -216,6 +216,66 @@ describe('Policy Decision Point', function() {
         })
     })
 
+    describe('#setRoles()', function () {
+        it('should grant role', function (done) {
+            const pdp = pdpFactory.initSync('./test/model.json')
+            pdp.resetSession()
+            pdp.login('nuno', ['designer'])
+            assert(pdp.isPermitted('nuno', 'write'))
+            assert(!pdp.isPermitted('nuno', 'chat'))
+            pdp.setRoles('nuno', ['social'])
+            assert(pdp.isPermitted('nuno', 'chat'))
+            done()
+        })
+
+        it('should throw error', function (done) {
+            const pdp = pdpFactory.initSync('./test/model.json')
+            pdp.resetSession()
+            assert.throws(
+                () => {
+                    pdp.setRoles('nuno', ["user"])
+                },
+                Error,
+                'user not logged'
+            )
+            done()
+        })
+
+        it('should grant several roles', function (done) {
+            const pdp = pdpFactory.initSync('./test/model.json')
+
+            pdp.resetSession()
+            pdp.login('nuno', ['user'])
+            assert(pdp.isPermitted('nuno', ['read']))
+            pdp.setRoles('nuno', ['designer', 'social'])
+            assert(pdp.isPermitted('nuno', 'chat'))
+            assert(pdp.isPermitted('nuno', 'write'))
+            done()
+        })
+
+        it('should ignore roles that do not exist in role hierarchy', function (done) {
+            const pdp = pdpFactory.initSync('./test/model.json')
+
+            pdp.resetSession()
+            pdp.login('joao', ['user'])
+            assert(pdp.isPermitted('joao', 'read'))
+            pdp.setRoles('joao', ['admin'])
+            assert(!pdp.isPermitted('joao', 'kick'))
+            done()
+        })
+
+        it('should remove user and grant admin', function (done) {
+            const pdp = pdpFactory.initSync('./test/model.json')
+
+            pdp.resetSession()
+            pdp.login('nuno', ['user'])
+            assert(pdp.isPermitted('nuno', 'read'))
+            const roles = pdp.setRoles('nuno', ['admin'])
+            assert(!roles.includes('user'))
+            done()
+        })
+    })
+
     describe('#grantRoles()', function () {
         it('should grant role', function (done) {
             const pdp = pdpFactory.initSync('./test/model.json')
