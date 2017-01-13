@@ -157,13 +157,12 @@ describe('Policy Decision Point', function() {
                     done(err)
                 }
                 pdp.resetSession()
-                assert.throws(
-                    () => {
-                        pdp.login('guest', ["user"])
-                    },
-                    Error,
-                    'user does not exist'
-                )
+                try{
+                    pdp.login('guest', ["user"])
+                    assert.fail()
+                } catch (error){
+                    assert(error.message === 'user does not exist')
+                }
                 done()
             })
         })
@@ -231,13 +230,11 @@ describe('Policy Decision Point', function() {
         it('should throw error', function (done) {
             const pdp = pdpFactory.initSync('./test/model.json')
             pdp.resetSession()
-            assert.throws(
-                () => {
-                    pdp.setRoles('nuno', ["user"])
-                },
-                Error,
-                'user not logged'
-            )
+            try {
+                pdp.setRoles('nuno', ["user"])
+            } catch (error) {
+                assert(error.message === 'user not logged')
+            }
             done()
         })
 
@@ -291,13 +288,12 @@ describe('Policy Decision Point', function() {
         it('should throw error', function (done) {
             const pdp = pdpFactory.initSync('./test/model.json')
             pdp.resetSession()
-            assert.throws(
-                () => {
-                    pdp.grantRoles('nuno', ["user"])
-                },
-                Error,
-                'user not logged'
-            )
+            try{
+                pdp.grantRoles('nuno', ["user"])
+                assert.fail()
+            } catch (error){
+                assert(error.message === 'user not logged')
+            }
             done()
         })
 
@@ -342,13 +338,13 @@ describe('Policy Decision Point', function() {
             const pdp = pdpFactory.initSync('./test/model.json')
 
             pdp.resetSession()
-            assert.throws(
-                () => {
-                    pdp.revokeRoles('nuno', ["user"])
-                },
-                Error,
-                'user not logged'
-            )
+
+            try{
+                pdp.revokeRoles('nuno', ["user"])
+                assert.fail()
+            } catch (error){
+                assert(error.message === 'user not logged')
+            }
             done()
         })
 

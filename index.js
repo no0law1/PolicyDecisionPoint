@@ -107,7 +107,7 @@ const pdp = {
             return true
         }
         const userRoles = memoryDB.UA[user]
-        if(!roles){
+        if(!userRoles){
             throw new Error('user does not exist')
         }
 
